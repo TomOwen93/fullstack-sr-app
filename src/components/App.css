@@ -1,3 +1,56 @@
+
 html {
-    background: #f8f8f8;
+    background: #868686;
+    font-family: 'Roboto', sans-serif
 }
+
+
+.nav-buttons{
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
+.nav-buttons button{
+/* font-size: 1rem; */
+margin: 0rem 0.5rem
+}
+
+/* .content-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1rem;
+    justify-content: center;
+    gap: 1rem; 
+} */
+
+.title-bar h1{
+    margin-left: 2rem;
+    font-size: 3rem
+}
+
+.title-bar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgb(177, 129, 214);
+    color: white;
+    height: 10rem;
+    border-radius: 5px;
+}
+
+.video-responsive {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+  }
+  
+  .video-responsive iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+  
+  
