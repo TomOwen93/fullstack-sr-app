@@ -1,8 +1,16 @@
-import { Button, Card, CardContent, Divider, Typography } from "@mui/material";
+import {
+    Button,
+    Card,
+    CardContent,
+    Container,
+    Divider,
+    Typography,
+} from "@mui/material";
 import YoutubeEmbed from "./YoutubeEmbed";
 import { Content } from "../utils/interfaces";
 import { StarOutlineOutlined } from "@mui/icons-material";
 import matchYouTubeURL from "../utils/matchYouTubeURL";
+import { SpotifyEmbed } from "spotify-embed";
 
 interface ContentCardProps {
     content: Content;
@@ -11,9 +19,6 @@ interface ContentCardProps {
 export default function ContentCard({
     content,
 }: ContentCardProps): JSX.Element {
-    if (content.youtube_url !== undefined) {
-        console.log(matchYouTubeURL(content.youtube_url));
-    }
     return (
         <>
             <Card
@@ -26,16 +31,21 @@ export default function ContentCard({
                 }}
             >
                 <CardContent>
-                    {content.youtube_url !== undefined && (
-                        <YoutubeEmbed
-                            embedId={matchYouTubeURL(content.youtube_url)}
-                        />
+                    {content.youtube_url !== "" && (
+                        <Container>
+                            <YoutubeEmbed
+                                embedId={matchYouTubeURL(content.youtube_url)}
+                            />
+                        </Container>
+                    )}
+                    {content.spotify_url !== null && (
+                        <SpotifyEmbed src={`${content.spotify_url}`} />
                     )}
                     <Typography gutterBottom variant="h4">
                         {content.title}
                     </Typography>
                     <Divider />
-                    <Typography variant="body1">{content.summary}</Typography>
+                    <Typography variant="body1">{content.artist}</Typography>
                     <Typography variant="subtitle2">
                         Submitted by: {content.username}
                     </Typography>
