@@ -1,6 +1,8 @@
-import { Paper } from "@mui/material";
 import ContentCard from "./ContentCard";
 import { Content } from "../utils/interfaces";
+import { Container, SelectChangeEvent } from "@mui/material";
+import { useState } from "react";
+import SubmitForm from "./SubmitForm";
 
 interface CategoryPageProps {
     contentlist: Content[];
@@ -9,13 +11,20 @@ interface CategoryPageProps {
 export default function CategoryPage({
     contentlist,
 }: CategoryPageProps): JSX.Element {
+    const [name, setName] = useState("");
+    const handleChange = (event: SelectChangeEvent) => {
+        setName(event.target.value);
+    };
+
     return (
         <>
-            <div className="content-grid">
+            <SubmitForm />
+
+            <Container>
                 {contentlist.map((content, index) => (
                     <ContentCard key={index} content={content} />
                 ))}
-            </div>
+            </Container>
         </>
     );
 }

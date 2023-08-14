@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ThemeOptions, ThemeProvider } from "@mui/material/styles";
 import "./App.css";
 import Navbar from "./Navbar";
 import CategoryPage from "./CategoryPage";
@@ -8,7 +9,6 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { ThemeOptions, ThemeProvider } from "@mui/material/styles";
 import theme from "../utils/theme";
 import axios from "axios";
 import { baseUrl } from "../utils/baseurl";

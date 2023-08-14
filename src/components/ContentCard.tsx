@@ -1,38 +1,42 @@
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Divider,
-    Typography,
-} from "@mui/material";
+import { Button, Card, CardContent, Divider, Typography } from "@mui/material";
 import YoutubeEmbed from "./YoutubeEmbed";
 import { Content } from "../utils/interfaces";
 import { StarOutlineOutlined } from "@mui/icons-material";
+import matchYouTubeURL from "../utils/matchYouTubeURL";
 
 interface ContentCardProps {
     content: Content;
 }
+
 export default function ContentCard({
     content,
 }: ContentCardProps): JSX.Element {
+    if (content.youtube_url !== undefined) {
+        console.log(matchYouTubeURL(content.youtube_url));
+    }
     return (
         <>
             <Card
                 variant="outlined"
                 sx={{
-                    width: "50rem",
                     marginTop: "2rem",
                     marginLeft: "auto",
                     marginRight: "auto",
+                    textAlign: "center",
                 }}
             >
                 <CardContent>
-                    <YoutubeEmbed embedId="xIIJfmDnvPE" />
-                    <Typography variant="h4">{content.title}</Typography>
+                    {content.youtube_url !== undefined && (
+                        <YoutubeEmbed
+                            embedId={matchYouTubeURL(content.youtube_url)}
+                        />
+                    )}
+                    <Typography gutterBottom variant="h4">
+                        {content.title}
+                    </Typography>
                     <Divider />
                     <Typography variant="body1">{content.summary}</Typography>
-                    <Typography variant="body2">
+                    <Typography variant="subtitle2">
                         Submitted by: {content.username}
                     </Typography>
                 </CardContent>

@@ -6,12 +6,12 @@ import {
     InfoOutlined,
 } from "@mui/icons-material";
 
-interface NavbarProps {}
-
-export default function Navbar(props: NavbarProps): JSX.Element {
+export default function Navbar(): JSX.Element {
     return (
         <div className="title-bar">
-            <Typography variant="h2">The Academy Library</Typography>
+            <Typography variant="h2" sx={{ padding: "1rem" }}>
+                The Academy Library
+            </Typography>
             <div className="nav-buttons">
                 <ButtonGroup variant="text" aria-label="text button group">
                     <Button

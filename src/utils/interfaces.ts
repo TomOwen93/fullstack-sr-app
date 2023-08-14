@@ -2,6 +2,6 @@ export interface Content {
     title: string;
     summary: string;
     username: string;
-    youtubeUrl?: string;
-    articleUrl?: string;
+    youtube_url?: string;
+    article_url?: string;
 }
