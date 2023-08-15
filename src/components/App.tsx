@@ -11,7 +11,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import axios from "axios";
 import { baseUrl } from "../utils/baseurl";
-import { Content, User } from "../utils/interfaces";
+import { Content, Genre, User } from "../utils/interfaces";
 
 export const themeOptions: ThemeOptions = createTheme({
     palette: {
@@ -32,6 +32,7 @@ function App() {
     const [contentList, setContentList] = useState<Content[]>([]);
     const [activeUser, setActiveUser] = useState<User>();
     const [userList, setUserList] = useState<User[]>([]);
+    const [genreList, setGenreList] = useState<Genre[]>([]);
 
     const fetchSongs = async () => {
         const results = await axios.get(`${baseUrl}/songs`);
@@ -52,11 +53,17 @@ function App() {
         setActiveUser(userList.find((user) => user.id === value));
     };
 
+    const fetchGenres = async () => {
+        const genres = await axios.get(`${baseUrl}/genres`);
+        setGenreList(genres.data);
+    };
+
     console.log(activeUser);
 
     useEffect(() => {
         fetchSongs();
         fetchUsers();
+        fetchGenres();
     }, []);
 
     return (
@@ -64,14 +71,14 @@ function App() {
             <ThemeProvider theme={themeOptions}>
                 <Navbar />
                 <HomePage />
-                {contentList.length > 0 && (
-                    <CategoryPage
-                        contentlist={contentList}
-                        handleUser={handleUser}
-                        userList={userList}
-                        activeUser={activeUser}
-                    />
-                )}
+                <CategoryPage
+                    contentlist={contentList}
+                    handleUser={handleUser}
+                    userList={userList}
+                    activeUser={activeUser}
+                    genreList={genreList}
+                />
+
                 <Footer />
             </ThemeProvider>
         </div>

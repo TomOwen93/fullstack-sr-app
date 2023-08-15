@@ -1,5 +1,5 @@
 import ContentCard from "./ContentCard";
-import { Content, User } from "../utils/interfaces";
+import { Content, Genre, User } from "../utils/interfaces";
 import {
     Container,
     FormControl,
@@ -15,6 +15,7 @@ interface ContentPageProps {
     handleUser: (event: string | number) => void;
     userList: User[];
     activeUser?: User;
+    genreList: Genre[];
 }
 
 export default function ContentPage({
@@ -22,6 +23,7 @@ export default function ContentPage({
     handleUser,
     userList,
     activeUser,
+    genreList,
 }: ContentPageProps): JSX.Element {
     console.log(activeUser);
     return (
@@ -52,7 +54,7 @@ export default function ContentPage({
                 </FormControl>
             </Container>
             <Container>
-                <SubmitForm activeUser={activeUser} />
+                <SubmitForm activeUser={activeUser} genreList={genreList} />
                 {contentlist.map((content, index) => (
                     <ContentCard key={index} content={content} />
                 ))}

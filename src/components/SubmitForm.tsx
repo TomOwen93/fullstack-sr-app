@@ -14,10 +14,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../utils/baseurl";
-import { User } from "../utils/interfaces";
+import { Genre, User } from "../utils/interfaces";
 
 interface SubmitFormProps {
     activeUser?: User;
+    genreList: Genre[];
 }
 
 type FormValues = {
@@ -29,7 +30,7 @@ type FormValues = {
     tags: string;
 };
 
-export default function SubmitForm({ activeUser }: SubmitFormProps) {
+export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -57,15 +58,31 @@ export default function SubmitForm({ activeUser }: SubmitFormProps) {
     });
 
     const { register, handleSubmit } = form;
+
     const onSubmit = async (data: FormValues) => {
         const formattedData = {
             ...data,
-            tags: selectedTags,
             userid: activeUser !== undefined ? activeUser.id : 0,
         };
 
-        console.log(formattedData);
-        const request = await axios.post(`${baseUrl}/songs`, formattedData);
+        const songid = await axios.post(`${baseUrl}/songs`, formattedData);
+        const genreids = [];
+
+        for (let tag of selectedTags) {
+            const genreid = await axios.get(`${baseUrl}/genres/${tag}`);
+            genreids.push(genreid.data);
+        }
+
+        console.log(genreids, songid.data);
+
+        if (genreids.length > 0) {
+            for (let genre of genreids) {
+                await axios.post(`${baseUrl}/songs_genres`, {
+                    songid: songid.data,
+                    genreid: genre,
+                });
+            }
+        }
     };
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

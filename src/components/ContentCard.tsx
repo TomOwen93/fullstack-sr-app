@@ -31,13 +31,16 @@ export default function ContentCard({
                 }}
             >
                 <CardContent>
-                    {content.youtube_url !== "" && (
-                        <Container>
-                            <YoutubeEmbed
-                                embedId={matchYouTubeURL(content.youtube_url)}
-                            />
-                        </Container>
-                    )}
+                    {content.youtube_url !== "" &&
+                        content.youtube_url !== undefined && (
+                            <Container>
+                                <YoutubeEmbed
+                                    embedId={matchYouTubeURL(
+                                        content.youtube_url
+                                    )}
+                                />
+                            </Container>
+                        )}
                     {content.spotify_url !== null && (
                         <SpotifyEmbed src={`${content.spotify_url}`} />
                     )}
