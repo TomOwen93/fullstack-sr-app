@@ -55,10 +55,10 @@ function App() {
 
     const fetchGenres = async () => {
         const genres = await axios.get(`${baseUrl}/genres`);
-        setGenreList(genres.data);
+        setGenreList(genres.data.result);
     };
 
-    console.log(activeUser);
+    console.log(genreList);
 
     useEffect(() => {
         fetchSongs();
@@ -78,7 +78,6 @@ function App() {
                     activeUser={activeUser}
                     genreList={genreList}
                 />
-
                 <Footer />
             </ThemeProvider>
         </div>

@@ -39,6 +39,7 @@ export default function ContentPage({
                         id="demo-simple-select-helper"
                         value={activeUser !== undefined ? activeUser.id : ""}
                         label="Name"
+                        sx={{ color: "secondary" }}
                         onChange={(e) => handleUser(e.target.value)}
                     >
                         <MenuItem value="">

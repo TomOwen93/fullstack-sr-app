@@ -1,4 +1,5 @@
 import {
+    Alert,
     Button,
     Card,
     Checkbox,
@@ -6,6 +7,7 @@ import {
     FormControlLabel,
     Menu,
     MenuItem,
+    Snackbar,
     Stack,
     TextField,
     Typography,
@@ -15,6 +17,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../utils/baseurl";
 import { Genre, User } from "../utils/interfaces";
+import getErrorText from "../utils/getErrorText";
 
 interface SubmitFormProps {
     activeUser?: User;
@@ -33,13 +36,19 @@ type FormValues = {
 export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [openAlert, setOpenAlert] = useState<boolean>(false);
+    const [error, setError] = useState<string>();
 
     const handleTagToggle = (tag: string) => {
         if (selectedTags.includes(tag)) {
-            selectedTags.filter((item) => item !== tag);
+            setSelectedTags(selectedTags.filter((item) => item !== tag));
         } else {
             setSelectedTags((prev) => [...prev, tag]);
         }
+    };
+
+    const handleCloseAlert = () => {
+        setOpenAlert(!openAlert);
     };
 
     const open = Boolean(anchorEl);
@@ -60,27 +69,38 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
     const { register, handleSubmit } = form;
 
     const onSubmit = async (data: FormValues) => {
-        const formattedData = {
-            ...data,
-            userid: activeUser !== undefined ? activeUser.id : 0,
-        };
+        if (activeUser === undefined) {
+            setOpenAlert(true);
+            setError("User");
+        } else if (data.title === "" || data.artist === "") {
+            setOpenAlert(true);
+            setError("Title/Artist");
+        } else if (data.youtube_url === "" && data.spotify_url === "") {
+            setOpenAlert(true);
+            setError("URL");
+        } else {
+            const formattedData = {
+                ...data,
+                userid: activeUser !== undefined ? activeUser.id : 0,
+            };
 
-        const songid = await axios.post(`${baseUrl}/songs`, formattedData);
-        const genreids = [];
+            const songid = await axios.post(`${baseUrl}/songs`, formattedData);
+            const genreids = [];
 
-        for (let tag of selectedTags) {
-            const genreid = await axios.get(`${baseUrl}/genres/${tag}`);
-            genreids.push(genreid.data);
-        }
+            for (let tag of selectedTags) {
+                const genreid = await axios.get(`${baseUrl}/genres/${tag}`);
+                genreids.push(genreid.data);
+            }
 
-        console.log(genreids, songid.data);
+            console.log(genreids, songid.data);
 
-        if (genreids.length > 0) {
-            for (let genre of genreids) {
-                await axios.post(`${baseUrl}/songs_genres`, {
-                    songid: songid.data,
-                    genreid: genre,
-                });
+            if (genreids.length > 0) {
+                for (let genre of genreids) {
+                    await axios.post(`${baseUrl}/songs_genres`, {
+                        songid: songid.data,
+                        genreid: genre,
+                    });
+                }
             }
         }
     };
@@ -89,31 +109,7 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
         setAnchorEl(event.currentTarget);
     };
 
-    const musicTags = [
-        "Acoustic",
-        "Alternative",
-        "Ambient",
-        "Blues",
-        "Classical",
-        "Country",
-        "Electronic",
-        "Folk",
-        "Funk",
-        "Hip-Hop",
-        "Indie",
-        "Jazz",
-        "Metal",
-        "Pop",
-        "Punk",
-        "R&B",
-        "Reggae",
-        "Rock",
-        "Soul",
-        "Techno",
-        "Trance",
-        "World",
-    ];
-
+    const musicTags = genreList.map((genre) => genre.genre);
     return (
         <>
             <Container sx={{ textAlign: "center", width: "50rem" }}>
@@ -155,6 +151,7 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
                                 anchorEl={anchorEl}
                                 open={open}
                                 onClose={handleClose}
+                                sx={{ color: "primary" }}
                                 {...register("tags")}
                             >
                                 {musicTags.map((tag, index) => (
@@ -180,6 +177,19 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
                     </form>
                 </Card>
             </Container>
+
+            {error && (
+                <Snackbar
+                    open={openAlert}
+                    autoHideDuration={3000}
+                    onClose={handleCloseAlert}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                    <Alert onClose={handleCloseAlert} severity="error">
+                        {getErrorText(error)}
+                    </Alert>
+                </Snackbar>
+            )}
         </>
     );
 }

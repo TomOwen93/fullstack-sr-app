@@ -11,3 +11,8 @@ export interface User {
     username: string;
     id: number;
 }
+
+export interface Genre {
+    id: number;
+    genre: string;
+}
