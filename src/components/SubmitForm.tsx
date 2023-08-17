@@ -84,6 +84,7 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
                 userid: activeUser !== undefined ? activeUser.id : 0,
             };
 
+            console.log(formattedData);
             const songid = await axios.post(`${baseUrl}/songs`, formattedData);
             const genreids = [];
 

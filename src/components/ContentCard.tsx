@@ -32,6 +32,7 @@ export default function ContentCard({
             >
                 <CardContent>
                     {content.youtube_url !== "" &&
+                        content.youtube_url !== null &&
                         content.youtube_url !== undefined && (
                             <Container>
                                 <YoutubeEmbed

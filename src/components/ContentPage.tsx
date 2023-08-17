@@ -4,6 +4,7 @@ import {
     Container,
     FormControl,
     FormHelperText,
+    Grid,
     InputLabel,
     MenuItem,
     Select,
@@ -54,12 +55,14 @@ export default function ContentPage({
                     <FormHelperText>Choose a user to login as</FormHelperText>
                 </FormControl>
             </Container>
-            <Container>
-                <SubmitForm activeUser={activeUser} genreList={genreList} />
+            <SubmitForm activeUser={activeUser} genreList={genreList} />
+            <Grid container spacing={3}>
                 {contentlist.map((content, index) => (
-                    <ContentCard key={index} content={content} />
+                    <Grid item xs={4}>
+                        <ContentCard key={index} content={content} />
+                    </Grid>
                 ))}
-            </Container>
+            </Grid>
         </>
     );
 }
