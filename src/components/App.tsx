@@ -48,17 +48,15 @@ function App() {
         console.log("fetched");
     };
 
-    const handleUser = (value: string | number) => {
-        console.log(value);
-        setActiveUser(userList.find((user) => user.id === value));
-    };
-
     const fetchGenres = async () => {
         const genres = await axios.get(`${baseUrl}/genres`);
         setGenreList(genres.data.result);
     };
 
-    console.log(genreList);
+    const handleUser = (value: string | number) => {
+        console.log(value);
+        setActiveUser(userList.find((user) => user.id === value));
+    };
 
     useEffect(() => {
         fetchSongs();
@@ -71,13 +69,15 @@ function App() {
             <ThemeProvider theme={themeOptions}>
                 <Navbar />
                 <HomePage />
-                <CategoryPage
-                    contentlist={contentList}
-                    handleUser={handleUser}
-                    userList={userList}
-                    activeUser={activeUser}
-                    genreList={genreList}
-                />
+                {userList.length > 0 && (
+                    <CategoryPage
+                        contentlist={contentList}
+                        handleUser={handleUser}
+                        userList={userList}
+                        activeUser={activeUser}
+                        genreList={genreList}
+                    />
+                )}
                 <Footer />
             </ThemeProvider>
         </div>

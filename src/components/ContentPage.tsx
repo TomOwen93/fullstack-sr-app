@@ -59,7 +59,11 @@ export default function ContentPage({
             <Grid container spacing={3}>
                 {contentlist.map((content, index) => (
                     <Grid item xs={4}>
-                        <ContentCard key={index} content={content} />
+                        <ContentCard
+                            key={index}
+                            content={content}
+                            userList={userList}
+                        />
                     </Grid>
                 ))}
             </Grid>

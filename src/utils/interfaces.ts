@@ -1,7 +1,7 @@
 export interface Content {
     title: string;
     artist: string;
-    username: string;
+    userid: number;
     youtube_url?: string;
     spotify_url?: string;
     tags: string;

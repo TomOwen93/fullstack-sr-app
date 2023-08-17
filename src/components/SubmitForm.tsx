@@ -18,6 +18,7 @@ import axios from "axios";
 import { baseUrl } from "../utils/baseurl";
 import { Genre, User } from "../utils/interfaces";
 import getErrorText from "../utils/getErrorText";
+import matchGenreId from "../utils/matchGenreId";
 
 interface SubmitFormProps {
     activeUser?: User;
@@ -84,24 +85,15 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
                 userid: activeUser !== undefined ? activeUser.id : 0,
             };
 
-            console.log(formattedData);
             const songid = await axios.post(`${baseUrl}/songs`, formattedData);
-            const genreids = [];
 
-            for (let tag of selectedTags) {
-                const genreid = await axios.get(`${baseUrl}/genres/${tag}`);
-                genreids.push(genreid.data);
-            }
+            if (selectedTags.length > 0) {
+                const selectedIds = matchGenreId(selectedTags, genreList);
 
-            console.log(genreids, songid.data);
-
-            if (genreids.length > 0) {
-                for (let genre of genreids) {
-                    await axios.post(`${baseUrl}/songs_genres`, {
-                        songid: songid.data,
-                        genreid: genre,
-                    });
-                }
+                await axios.post(`${baseUrl}/songs_genres`, {
+                    songid: songid.data,
+                    genreid: selectedIds,
+                });
             }
         }
     };

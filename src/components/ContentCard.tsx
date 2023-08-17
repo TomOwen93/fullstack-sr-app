@@ -7,18 +7,23 @@ import {
     Typography,
 } from "@mui/material";
 import YoutubeEmbed from "./YoutubeEmbed";
-import { Content } from "../utils/interfaces";
+import { Content, User } from "../utils/interfaces";
 import { StarOutlineOutlined } from "@mui/icons-material";
 import matchYouTubeURL from "../utils/matchYouTubeURL";
 import { SpotifyEmbed } from "spotify-embed";
 
 interface ContentCardProps {
     content: Content;
+    userList: User[];
 }
 
 export default function ContentCard({
     content,
+    userList,
 }: ContentCardProps): JSX.Element {
+    const userName = userList.find(
+        (user) => user.id === content.userid
+    )?.username;
     return (
         <>
             <Card
@@ -51,7 +56,7 @@ export default function ContentCard({
                     <Divider />
                     <Typography variant="body1">{content.artist}</Typography>
                     <Typography variant="subtitle2">
-                        Submitted by: {content.username}
+                        Submitted by: {userName}
                     </Typography>
                 </CardContent>
                 <Button
@@ -63,6 +68,7 @@ export default function ContentCard({
                 >
                     Add to Favourites
                 </Button>
+                <Comments />
             </Card>
         </>
     );
