@@ -1,5 +1,3 @@
-interface FooterProps {}
-
-export default function Footer(props: FooterProps): JSX.Element {
+export default function Footer(): JSX.Element {
     return <></>;
 }
