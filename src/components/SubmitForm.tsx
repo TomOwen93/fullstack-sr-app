@@ -39,6 +39,7 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [openAlert, setOpenAlert] = useState<boolean>(false);
     const [error, setError] = useState<string>();
+    const [openSubmit, setOpenSubmit] = useState<boolean>(false);
 
     const handleTagToggle = (tag: string) => {
         if (selectedTags.includes(tag)) {
@@ -50,6 +51,10 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
 
     const handleCloseAlert = () => {
         setOpenAlert(!openAlert);
+    };
+
+    const handleCloseSubmit = () => {
+        setOpenSubmit(!openSubmit);
     };
 
     const open = Boolean(anchorEl);
@@ -67,7 +72,7 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
         },
     });
 
-    const { register, handleSubmit } = form;
+    const { register, handleSubmit, reset } = form;
 
     const onSubmit = async (data: FormValues) => {
         if (activeUser === undefined) {
@@ -95,6 +100,8 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
                     genreid: selectedIds,
                 });
             }
+
+            reset();
         }
     };
 
@@ -108,7 +115,7 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
             <Container sx={{ textAlign: "center", width: "50rem" }}>
                 <Card sx={{ marginTop: "1rem" }}>
                     <Typography variant="h4" sx={{ color: "primary.main" }}>
-                        Submit an article/video
+                        Submit a Song
                     </Typography>
                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
                         <Stack>
@@ -183,6 +190,17 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
                     </Alert>
                 </Snackbar>
             )}
+
+            <Snackbar
+                open={openSubmit}
+                autoHideDuration={3000}
+                onClose={handleCloseSubmit}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert onClose={handleCloseSubmit} severity="success">
+                    Song successfully submitted!
+                </Alert>
+            </Snackbar>
         </>
     );
 }

@@ -2,9 +2,12 @@ export interface Content {
     title: string;
     artist: string;
     userid: number;
+    username: string;
     youtube_url?: string;
     spotify_url?: string;
     tags: string;
+    id: number;
+    genre: string[];
 }
 
 export interface User {
