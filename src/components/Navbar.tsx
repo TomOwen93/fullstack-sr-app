@@ -15,6 +15,10 @@ export default function Navbar(): JSX.Element {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                position: "sticky",
+                zIndex: 10,
+                top: 0,
+                left: 0,
             }}
         >
             <Typography variant="h2" sx={{ padding: "1rem" }}>
@@ -31,7 +35,10 @@ export default function Navbar(): JSX.Element {
                             sx={{ color: grey[900] }}
                             startIcon={
                                 <HomeOutlined
-                                    style={{ width: "2rem", height: "2rem" }}
+                                    style={{
+                                        width: "2rem",
+                                        height: "2rem",
+                                    }}
                                 />
                             }
                         >
@@ -44,7 +51,10 @@ export default function Navbar(): JSX.Element {
                             sx={{ color: grey[900] }}
                             startIcon={
                                 <StarOutlineOutlined
-                                    style={{ width: "2rem", height: "2rem" }}
+                                    style={{
+                                        width: "2rem",
+                                        height: "2rem",
+                                    }}
                                 />
                             }
                         >
@@ -56,7 +66,10 @@ export default function Navbar(): JSX.Element {
                             sx={{ color: grey[900] }}
                             startIcon={
                                 <InfoOutlined
-                                    style={{ width: "2rem", height: "2rem" }}
+                                    style={{
+                                        width: "2rem",
+                                        height: "2rem",
+                                    }}
                                 />
                             }
                         >
