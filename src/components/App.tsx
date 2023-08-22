@@ -10,7 +10,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import axios from "axios";
 import { baseUrl } from "../utils/baseurl";
-import { Content, Genre, User } from "../utils/interfaces";
+import { Comment, Content, Genre, User } from "../utils/interfaces";
 import { Routes, Route, useLocation } from "react-router-dom";
 import AboutPage from "./AboutPage";
 import FavouritesPage from "./FavouritesPage";
@@ -34,36 +34,42 @@ function App() {
     const [activeUser, setActiveUser] = useState<User>();
     const [userList, setUserList] = useState<User[]>([]);
     const [genreList, setGenreList] = useState<Genre[]>([]);
+    const [refreshFavourite, setRefreshFavourite] = useState<number>(0);
+    const [commentsList, setCommentsList] = useState<Comment[]>();
 
     const fetchSongs = async () => {
         const results = await axios.get(`${baseUrl}/songs`);
         setAllSongsList(results.data);
-        console.log(results.data);
-        console.log("fetched songs");
     };
 
     const fetchUsers = async () => {
         const results = await axios.get(`${baseUrl}/users`);
         setUserList(results.data.data);
-        console.log(results.data.data);
-        console.log("fetched user list");
     };
 
     const fetchGenres = async () => {
         const genres = await axios.get(`${baseUrl}/genres`);
         setGenreList(genres.data.result);
-        console.log("fetched genre list");
+    };
+
+    const fetchComments = async () => {
+        const comments = await axios.get(`${baseUrl}/comments`);
+        setCommentsList(comments.data.rows);
     };
 
     const handleUser = (value: string | number) => {
-        console.log(value);
         setActiveUser(userList.find((user) => user.id === value));
+    };
+
+    const handleFavouriteUpdate = () => {
+        setRefreshFavourite((prev) => (prev += 1));
     };
 
     useEffect(() => {
         fetchSongs();
         fetchUsers();
         fetchGenres();
+        fetchComments();
     }, []);
 
     useEffect(() => {
@@ -72,12 +78,12 @@ function App() {
                 `${baseUrl}/favourites/${activeUser?.id}`
             );
             setFavouritesList(favourites.data);
-            console.log(favourites.data);
         };
+
         if (activeUser !== undefined) {
             fetchFavourites();
         }
-    }, [activeUser, activePage]);
+    }, [activeUser, activePage, refreshFavourite]);
 
     const location = useLocation();
 
@@ -85,7 +91,6 @@ function App() {
         setActivePage(location.pathname);
     }, [location.pathname]);
 
-    console.log(activePage);
     return (
         <div className="App">
             <ThemeProvider theme={themeOptions}>
@@ -100,6 +105,12 @@ function App() {
                                 userList={userList}
                                 activeUser={activeUser}
                                 genreList={genreList}
+                                activePage={activePage}
+                                favouritesList={favouritesList}
+                                handleFavouriteUpdate={handleFavouriteUpdate}
+                                fetchSongs={fetchSongs}
+                                fetchComments={fetchComments}
+                                commentsList={commentsList}
                             />
                         }
                     />
@@ -113,6 +124,10 @@ function App() {
                                 userList={userList}
                                 activeUser={activeUser}
                                 genreList={genreList}
+                                activePage={activePage}
+                                handleFavouriteUpdate={handleFavouriteUpdate}
+                                commentsList={commentsList}
+                                fetchComments={fetchComments}
                             />
                         }
                     />

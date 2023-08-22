@@ -1,13 +1,15 @@
 import {
     Container,
+    Divider,
     FormControl,
     FormHelperText,
     Grid,
     InputLabel,
     MenuItem,
     Select,
+    Typography,
 } from "@mui/material";
-import { Content, User, Genre } from "../utils/interfaces";
+import { Comment, Content, Genre, User } from "../utils/interfaces";
 import ContentCard from "./ContentCard";
 
 interface FavouritesPageProps {
@@ -16,6 +18,10 @@ interface FavouritesPageProps {
     userList: User[];
     activeUser?: User;
     genreList: Genre[];
+    activePage: string;
+    handleFavouriteUpdate: () => void;
+    commentsList?: Comment[];
+    fetchComments: () => void;
 }
 
 export default function FavouritesPage({
@@ -23,6 +29,9 @@ export default function FavouritesPage({
     activeUser,
     userList,
     handleUser,
+    handleFavouriteUpdate,
+    commentsList,
+    fetchComments,
 }: FavouritesPageProps): JSX.Element {
     return (
         <>
@@ -52,22 +61,35 @@ export default function FavouritesPage({
                 </FormControl>
             </Container>
 
-            <Grid
-                container
-                spacing={3}
-                justifyContent={
-                    contentlist.length === 1 ? "center" : "flex-start"
-                }
-            >
-                {contentlist.map((content, index) => (
-                    <Grid item xs="auto" key={index}>
-                        <ContentCard
-                            content={content}
-                            activeUser={activeUser}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
+            {contentlist.length > 0 && activeUser !== undefined ? (
+                <Grid
+                    container
+                    spacing={3}
+                    justifyContent={
+                        contentlist.length === 1 ? "center" : "flex-start"
+                    }
+                >
+                    {contentlist.map((content, index) => (
+                        <Grid item xs="auto" key={index}>
+                            <ContentCard
+                                content={content}
+                                activeUser={activeUser}
+                                handleFavouriteUpdate={handleFavouriteUpdate}
+                                commentsList={commentsList}
+                                fetchComments={fetchComments}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            ) : (
+                <>
+                    <Divider />
+                    <Typography sx={{ textAlign: "center" }} variant="h4">
+                        You have no favourites! Go back to the home page and
+                        start finding some new music!
+                    </Typography>
+                </>
+            )}
         </>
     );
 }

@@ -1,5 +1,5 @@
 import ContentCard from "./ContentCard";
-import { Content, Genre, User } from "../utils/interfaces";
+import { Comment, Content, Genre, User } from "../utils/interfaces";
 import {
     Box,
     Container,
@@ -18,6 +18,12 @@ interface ContentPageProps {
     userList: User[];
     activeUser?: User;
     genreList: Genre[];
+    activePage: string;
+    favouritesList?: Content[];
+    handleFavouriteUpdate: () => void;
+    fetchSongs: () => void;
+    commentsList?: Comment[];
+    fetchComments: () => void;
 }
 
 export default function ContentPage({
@@ -26,9 +32,12 @@ export default function ContentPage({
     userList,
     activeUser,
     genreList,
+    favouritesList,
+    handleFavouriteUpdate,
+    fetchSongs,
+    commentsList,
+    fetchComments,
 }: ContentPageProps): JSX.Element {
-    console.log(activeUser);
-
     return (
         <>
             {" "}
@@ -57,7 +66,11 @@ export default function ContentPage({
                     <FormHelperText>Choose a user to login as</FormHelperText>
                 </FormControl>
             </Container>
-            <SubmitForm activeUser={activeUser} genreList={genreList} />
+            <SubmitForm
+                activeUser={activeUser}
+                genreList={genreList}
+                fetchSongs={fetchSongs}
+            />
             <Box sx={{ alignContent: "center" }}>
                 <Grid
                     container
@@ -71,6 +84,10 @@ export default function ContentPage({
                             <ContentCard
                                 content={content}
                                 activeUser={activeUser}
+                                favouritesList={favouritesList}
+                                handleFavouriteUpdate={handleFavouriteUpdate}
+                                commentsList={commentsList}
+                                fetchComments={fetchComments}
                             />
                         </Grid>
                     ))}

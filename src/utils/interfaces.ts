@@ -19,3 +19,11 @@ export interface Genre {
     id: number;
     genre: string;
 }
+
+export interface Comment {
+    song_id: number;
+    comment: string;
+    created_at: Date;
+    user_id: number;
+    username: string;
+}

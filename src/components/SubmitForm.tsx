@@ -23,6 +23,7 @@ import matchGenreId from "../utils/matchGenreId";
 interface SubmitFormProps {
     activeUser?: User;
     genreList: Genre[];
+    fetchSongs: () => void;
 }
 
 type FormValues = {
@@ -34,7 +35,11 @@ type FormValues = {
     tags: string;
 };
 
-export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
+export default function SubmitForm({
+    activeUser,
+    genreList,
+    fetchSongs,
+}: SubmitFormProps) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [openAlert, setOpenAlert] = useState<boolean>(false);
@@ -96,11 +101,11 @@ export default function SubmitForm({ activeUser, genreList }: SubmitFormProps) {
                 const selectedIds = matchGenreId(selectedTags, genreList);
 
                 await axios.post(`${baseUrl}/songs_genres`, {
-                    songid: songid.data,
+                    songid: songid.data.id,
                     genreid: selectedIds,
                 });
             }
-
+            fetchSongs();
             reset();
         }
     };
