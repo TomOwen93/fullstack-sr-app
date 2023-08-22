@@ -71,7 +71,6 @@ export default function ContentCard({
     const handleDeleteSong = async () => {
         await axios.delete(`${baseUrl}/songs_genres/${content.id}`);
         await axios.delete(`${baseUrl}/content/${content.id}`);
-
         fetchSongs();
     };
 
@@ -142,7 +141,7 @@ export default function ContentCard({
                         Submitted by: {content.username}
                         {content.created_at !== null &&
                             ` - ${moment(content.created_at).format(
-                                "dd/mm/yyyy - hA:mm"
+                                "DD/MM/YYYY h:MMA"
                             )} `}
                     </Typography>
                     <Divider />
