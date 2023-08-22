@@ -101,11 +101,11 @@ export default function ContentCard({
                     )}
 
                     <Stack>
-                        <Typography gutterBottom variant="h4">
+                        <Typography gutterBottom variant="h5">
                             {content.title}
                         </Typography>
                     </Stack>
-                    <Typography gutterBottom variant="h4">
+                    <Typography gutterBottom variant="h5">
                         {content.artist}
                     </Typography>
 

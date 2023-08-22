@@ -80,7 +80,7 @@ export default function ContentPage({
                     }
                 >
                     {contentlist.map((content, index) => (
-                        <Grid item xs="auto" key={index}>
+                        <Grid item xs={4} key={index}>
                             <ContentCard
                                 content={content}
                                 activeUser={activeUser}
