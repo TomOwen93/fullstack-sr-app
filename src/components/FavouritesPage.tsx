@@ -22,6 +22,7 @@ interface FavouritesPageProps {
     handleFavouriteUpdate: () => void;
     commentsList?: Comment[];
     fetchComments: () => void;
+    fetchSongs: () => void;
 }
 
 export default function FavouritesPage({
@@ -32,6 +33,7 @@ export default function FavouritesPage({
     handleFavouriteUpdate,
     commentsList,
     fetchComments,
+    fetchSongs,
 }: FavouritesPageProps): JSX.Element {
     return (
         <>
@@ -77,6 +79,7 @@ export default function FavouritesPage({
                                 handleFavouriteUpdate={handleFavouriteUpdate}
                                 commentsList={commentsList}
                                 fetchComments={fetchComments}
+                                fetchSongs={fetchSongs}
                             />
                         </Grid>
                     ))}

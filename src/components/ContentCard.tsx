@@ -11,7 +11,11 @@ import {
 } from "@mui/material";
 import YoutubeEmbed from "./YoutubeEmbed";
 import { Comment, Content, User } from "../utils/interfaces";
-import { StarOutlineOutlined, StarOutlineSharp } from "@mui/icons-material";
+import {
+    CloseSharp,
+    StarOutlineOutlined,
+    StarOutlineSharp,
+} from "@mui/icons-material";
 import matchYouTubeURL from "../utils/matchYouTubeURL";
 import { SpotifyEmbed } from "spotify-embed";
 import axios from "axios";
@@ -19,6 +23,7 @@ import { baseUrl } from "../utils/baseurl";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Comments from "./Comments";
+import moment from "moment";
 
 interface ContentCardProps {
     content: Content;
@@ -27,6 +32,7 @@ interface ContentCardProps {
     handleFavouriteUpdate: () => void;
     commentsList?: Comment[];
     fetchComments: () => void;
+    fetchSongs: () => void;
 }
 
 export default function ContentCard({
@@ -36,6 +42,7 @@ export default function ContentCard({
     handleFavouriteUpdate,
     commentsList,
     fetchComments,
+    fetchSongs,
 }: ContentCardProps): JSX.Element {
     const [openAlert, setOpenAlert] = useState<boolean>(false);
     const handleAddFavourite = async (song: Content) => {
@@ -61,13 +68,20 @@ export default function ContentCard({
         }
     };
 
+    const handleDeleteSong = async () => {
+        await axios.delete(`${baseUrl}/songs_genres/${content.id}`);
+        await axios.delete(`${baseUrl}/content/${content.id}`);
+
+        fetchSongs();
+    };
+
     const handleCloseAlert = () => {
         setOpenAlert(false);
     };
 
     const location = useLocation();
 
-    console.log(favouritesList);
+    console.log(activeUser, content.userid);
 
     const songsComments = commentsList?.filter(
         (comment) => comment.song_id === Number(content.id)
@@ -84,6 +98,20 @@ export default function ContentCard({
                     textAlign: "center",
                 }}
             >
+                {activeUser?.id === content.userid && (
+                    <>
+                        <CloseSharp
+                            onClick={handleDeleteSong}
+                            sx={{
+                                cursor: "pointer",
+                            }}
+                        />
+                        <Typography variant="subtitle2">
+                            {" "}
+                            Delete Song
+                        </Typography>
+                    </>
+                )}
                 <CardContent>
                     {content.youtube_url !== "" &&
                         content.youtube_url !== null &&
@@ -112,6 +140,10 @@ export default function ContentCard({
                     <Divider />
                     <Typography variant="body1">
                         Submitted by: {content.username}
+                        {content.created_at !== null &&
+                            ` - ${moment(content.created_at).format(
+                                "dd/mm/yyyy - hA:mm"
+                            )} `}
                     </Typography>
                     <Divider />
                     {content.genre[0] !== null && (

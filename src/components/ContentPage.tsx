@@ -88,6 +88,7 @@ export default function ContentPage({
                                 handleFavouriteUpdate={handleFavouriteUpdate}
                                 commentsList={commentsList}
                                 fetchComments={fetchComments}
+                                fetchSongs={fetchSongs}
                             />
                         </Grid>
                     ))}

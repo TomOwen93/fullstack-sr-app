@@ -128,6 +128,7 @@ function App() {
                                 handleFavouriteUpdate={handleFavouriteUpdate}
                                 commentsList={commentsList}
                                 fetchComments={fetchComments}
+                                fetchSongs={fetchSongs}
                             />
                         }
                     />
