@@ -8,6 +8,7 @@ export interface Content {
     tags: string;
     id: number;
     genre: string[];
+    created_at?: Date;
 }
 
 export interface User {
