@@ -23,7 +23,7 @@ export default function AboutPage(): JSX.Element {
                     <CardContent>
                         <Avatar
                             alt="Tom Owen"
-                            src={"/src/tom.png"}
+                            src={"tom.png"}
                             sx={{
                                 width: 200,
                                 height: 200,
