@@ -6,29 +6,39 @@ import {
     Container,
     Divider,
     Snackbar,
+    Stack,
     Typography,
 } from "@mui/material";
 import YoutubeEmbed from "./YoutubeEmbed";
-import { Content, User } from "../utils/interfaces";
-import { StarOutlineOutlined } from "@mui/icons-material";
+import { Comment, Content, User } from "../utils/interfaces";
+import { StarOutlineOutlined, StarOutlineSharp } from "@mui/icons-material";
 import matchYouTubeURL from "../utils/matchYouTubeURL";
 import { SpotifyEmbed } from "spotify-embed";
 import axios from "axios";
 import { baseUrl } from "../utils/baseurl";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import Comments from "./Comments";
 
 interface ContentCardProps {
     content: Content;
     activeUser?: User;
+    favouritesList?: Content[];
+    handleFavouriteUpdate: () => void;
+    commentsList?: Comment[];
+    fetchComments: () => void;
 }
 
 export default function ContentCard({
     content,
     activeUser,
+    favouritesList,
+    handleFavouriteUpdate,
+    commentsList,
+    fetchComments,
 }: ContentCardProps): JSX.Element {
     const [openAlert, setOpenAlert] = useState<boolean>(false);
-
-    const handleFavourite = async (song: Content) => {
+    const handleAddFavourite = async (song: Content) => {
         if (activeUser === undefined) {
             setOpenAlert(true);
         } else {
@@ -36,12 +46,32 @@ export default function ContentCard({
                 id: song.id,
                 userid: activeUser.id,
             });
+            handleFavouriteUpdate();
+        }
+    };
+
+    const handleRemoveFavourite = async (song: Content) => {
+        if (activeUser === undefined) {
+            setOpenAlert(true);
+        } else {
+            await axios.delete(`${baseUrl}/favourites/${song.id}`, {
+                data: { activeUser },
+            });
+            handleFavouriteUpdate();
         }
     };
 
     const handleCloseAlert = () => {
         setOpenAlert(false);
     };
+
+    const location = useLocation();
+
+    console.log(favouritesList);
+
+    const songsComments = commentsList?.filter(
+        (comment) => comment.song_id === Number(content.id)
+    );
 
     return (
         <>
@@ -69,30 +99,62 @@ export default function ContentCard({
                     {content.spotify_url !== null && (
                         <SpotifyEmbed src={`${content.spotify_url}`} />
                     )}
+
+                    <Stack>
+                        <Typography gutterBottom variant="h4">
+                            {content.title}
+                        </Typography>
+                    </Stack>
                     <Typography gutterBottom variant="h4">
-                        {content.title}
+                        {content.artist}
                     </Typography>
+
                     <Divider />
-                    <Typography variant="body1">{content.artist}</Typography>
-                    <Typography variant="subtitle2">
+                    <Typography variant="body1">
                         Submitted by: {content.username}
                     </Typography>
                     <Divider />
-                    <Typography variant="h6">
-                        Tags: {content.genre.map((genre) => `${genre}, `)}
-                    </Typography>
+                    {content.genre[0] !== null && (
+                        <Typography variant="subtitle2">
+                            Tags:{" "}
+                            {content.genre.map((genre, index) =>
+                                index === content.genre.length - 1
+                                    ? `${genre}`
+                                    : `${genre}, `
+                            )}
+                        </Typography>
+                    )}
                 </CardContent>
-                <Button
-                    onClick={() => handleFavourite(content)}
-                    startIcon={
-                        <StarOutlineOutlined
-                            style={{ width: "2rem", height: "2rem" }}
-                        />
-                    }
-                >
-                    Add to Favourites
-                </Button>
-                {/* <Comments /> */}
+                {location.pathname === "/favourites" ||
+                favouritesList?.some((fav) => fav.title === content.title) ? (
+                    <Button
+                        onClick={() => handleRemoveFavourite(content)}
+                        startIcon={
+                            <StarOutlineSharp
+                                style={{ width: "2rem", height: "2rem" }}
+                            />
+                        }
+                    >
+                        Remove From Favourites
+                    </Button>
+                ) : (
+                    <Button
+                        onClick={() => handleAddFavourite(content)}
+                        startIcon={
+                            <StarOutlineOutlined
+                                style={{ width: "2rem", height: "2rem" }}
+                            />
+                        }
+                    >
+                        Add to Favourites
+                    </Button>
+                )}
+                <Comments
+                    activeUser={activeUser}
+                    songid={content.id}
+                    songsComments={songsComments}
+                    fetchComments={fetchComments}
+                />
             </Card>
 
             <Snackbar
