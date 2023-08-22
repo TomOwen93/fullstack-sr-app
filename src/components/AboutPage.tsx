@@ -42,6 +42,17 @@ export default function AboutPage(): JSX.Element {
                             components, React, Express, PostgreSQL and
                             Typescript.
                         </Typography>
+
+                        <Typography variant="body1">
+                            Link to the{" "}
+                            <a href="https://github.com/TomOwen93/fullstack-sr-app">
+                                front-end repo
+                            </a>{" "}
+                            and the{" "}
+                            <a href="https://github.com/TomOwen93/fullstack-sr-app-backend">
+                                back-end repo
+                            </a>
+                        </Typography>
                     </CardContent>
                 </Card>
             </Container>
