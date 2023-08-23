@@ -4,6 +4,8 @@ import {
     Card,
     Checkbox,
     Container,
+    Dialog,
+    DialogContent,
     FormControlLabel,
     Menu,
     MenuItem,
@@ -45,6 +47,7 @@ export default function SubmitForm({
     const [openAlert, setOpenAlert] = useState<boolean>(false);
     const [error, setError] = useState<string>();
     const [openSubmit, setOpenSubmit] = useState<boolean>(false);
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
 
     const handleTagToggle = (tag: string) => {
         if (selectedTags.includes(tag)) {
@@ -115,6 +118,15 @@ export default function SubmitForm({
     };
 
     const musicTags = genreList.map((genre) => genre.genre);
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
     return (
         <>
             <Container sx={{ textAlign: "center", width: "50rem" }}>
@@ -122,64 +134,76 @@ export default function SubmitForm({
                     <Typography variant="h4" sx={{ color: "primary.main" }}>
                         Submit a Song
                     </Typography>
-                    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                        <Stack>
-                            <TextField
-                                id="outlined-basic"
-                                label="Title"
-                                variant="filled"
-                                {...register("title")}
-                            />
-                            <TextField
-                                id="outlined-basic"
-                                label="Artist"
-                                variant="filled"
-                                {...register("artist")}
-                            />
-                            <TextField
-                                id="outlined-basic"
-                                label="YouTube URL"
-                                variant="filled"
-                                {...register("youtube_url")}
-                            />
-                            <TextField
-                                id="outlined-basic"
-                                label="Spotify URL"
-                                variant="filled"
-                                {...register("spotify_url")}
-                            />
-                            <Button id="tags-button" onClick={handleClick}>
-                                Choose tags
-                            </Button>
-                            <Menu
-                                id="tags-dropdown"
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                                sx={{ color: "primary" }}
-                                {...register("tags")}
-                            >
-                                {musicTags.map((tag, index) => (
-                                    <MenuItem key={index}>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={selectedTags.includes(
-                                                        tag
-                                                    )}
-                                                    onChange={() =>
-                                                        handleTagToggle(tag)
+
+                    <Dialog open={openDialog} onClose={handleCloseDialog}>
+                        <DialogContent>
+                            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                                <Stack>
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Title"
+                                        variant="filled"
+                                        {...register("title")}
+                                    />
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Artist"
+                                        variant="filled"
+                                        {...register("artist")}
+                                    />
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="YouTube URL"
+                                        variant="filled"
+                                        {...register("youtube_url")}
+                                    />
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Spotify URL"
+                                        variant="filled"
+                                        {...register("spotify_url")}
+                                    />
+                                    <Button
+                                        id="tags-button"
+                                        onClick={handleClick}
+                                    >
+                                        Choose tags
+                                    </Button>
+                                    <Menu
+                                        id="tags-dropdown"
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        sx={{ color: "primary" }}
+                                        {...register("tags")}
+                                    >
+                                        {musicTags.map((tag, index) => (
+                                            <MenuItem key={index}>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Checkbox
+                                                            checked={selectedTags.includes(
+                                                                tag
+                                                            )}
+                                                            onChange={() =>
+                                                                handleTagToggle(
+                                                                    tag
+                                                                )
+                                                            }
+                                                        />
                                                     }
+                                                    label={tag}
                                                 />
-                                            }
-                                            label={tag}
-                                        />
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                            <Button type="submit">Submit</Button>
-                        </Stack>
-                    </form>
+                                            </MenuItem>
+                                        ))}
+                                    </Menu>
+                                    <Button type="submit">Submit</Button>
+                                </Stack>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
+
+                    <Button onClick={handleOpenDialog}>Open Submit Form</Button>
                 </Card>
             </Container>
 
